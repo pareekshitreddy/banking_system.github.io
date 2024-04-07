@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bank System - Customer Account Management</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript">
+        function showTask(taskId) {
+            var tasks = ["customerAccountManagement", "transactionProcessing", "accountBalanceInquiry", "loanManagement", "reporting"];
+            tasks.forEach(function(id) {
+                document.getElementById(id).style.display = 'none';
+            });
+
+            document.getElementById(taskId).style.display = 'block';
+        }
+
+        function showLogs() {
+    var logsTable = document.getElementById("logsTable");
+    logsTable.style.display = 'block';
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'view_logs.php', true);
+    xhr.onload = function () {
+        if (this.status === 200) {
+            var logs = JSON.parse(this.responseText);
+            var tableBody = logsTable.querySelector("tbody");
+            tableBody.innerHTML = ""; // Clear the table content
+
+            logs.forEach(function(log) {
+                var newRow = tableBody.insertRow(tableBody.rows.length);
+                newRow.insertCell(0).innerHTML = log.account_id;
+                newRow.insertCell(1).innerHTML = log.customer_name;
+                newRow.insertCell(2).innerHTML = log.operation;
+            });
+        }
+    }
+    xhr.send();
+}
+
+    </script>
+</head>
+<body>
+
+<h1>Bank Management System</h1>
+<p>Welcome to the Bank Management System. Here you can manage customer accounts, transactions, and more.</p>
+
+<!-- Buttons to Show Task Sections -->
+<button onclick="showTask('customerAccountManagement')">Customer Account Management</button>
+<button onclick="showTask('transactionProcessing')">Transaction Processing</button>
+<button onclick="showTask('accountBalanceInquiry')">Account Balance Inquiry</button>
+<button onclick="showTask('loanManagement')">Loan Management</button>
+<button onclick="showTask('reporting')">Reporting</button>
+
+
+<!-- Customer Account Management Section -->
+<div id="customerAccountManagement" style="display:none;">
+    <h2>Customer Account Management</h2>
+    <!-- Create Account Form -->
+    <!-- Create Account Form -->
+   <h3>Create Account</h3>
+   <form id="createAccountForm" action="create_account.php" method="POST" enctype="multipart/form-data">
+    <label for="customerName">Customer Name:</label>
+    <input type="text" id="customerName" name="customerName" required>
+    <input type="submit" value="Create Account">
+   </form>
+
+
+    <!-- Update Account Form -->
+<h3>Update Account</h3>
+<form id="updateAccountForm" action="update_account.php" method="POST" enctype="application/x-www-form-urlencoded">
+    <label for="accountId">Account ID:</label>
+    <input type="number" id="accountId" name="accountId" required>
+    <label for="newCustomerName">New Customer Name:</label>
+    <input type="text" id="newCustomerName" name="newCustomerName" required>
+    <input type="submit" value="Update Account">
+</form>
+
+
+<h3>Delete Account</h3>
+    <form id="deleteAccountForm" action="delete_account.php" method="POST">
+        <label for="deleteAccountId">Account ID:</label>
+        <input type="number" id="deleteAccountId" name="deleteAccountId" required>
+        <input type="submit" value="Delete Account">
+    </form>
+
+    <!-- View and Delete Accounts -->
+<h3>View Recent Logs</h3>
+<button onclick="showLogs()">View Logs</button>
+
+<!-- Placeholder for Logs Table -->
+<table id="logsTable" style="display:block;">
+    <thead>
+        <tr>
+            <th>Account ID</th>
+            <th>Customer Name</th>
+            <th>Operation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Table rows for logs will be populated here -->
+    </tbody>
+</table>
+</div>
+
+<!-- Transaction Processing Section -->
+<div id="transactionProcessing" style="display:none;">
+    <h2>Transaction Processing</h2>
+    
+    <!-- Deposit Form -->
+    <h3>Deposit Form</h3>
+    <form id="depositForm" action="transaction_processing1.php" method="POST" enctype="application/x-www-form-urlencoded">
+        <input type="hidden" name="operation" value="deposit">
+        <label for="depositAccountId">Account ID:</label>
+        <input type="number" id="depositAccountId" name="depositAccountId" required>
+        <label for="depositAmount">Amount:</label>
+        <input type="number" id="depositAmount" name="depositAmount" required>
+        <input type="submit" value="Deposit">
+    </form>
+
+    <!-- Withdrawal Form -->
+    <h3>Withdrawal Form</h3>
+    <form id="withdrawalForm" action="transaction_processing1.php" method="POST" enctype="application/x-www-form-urlencoded">
+        <input type="hidden" name="operation" value="withdraw">
+        <label for="withdrawalAccountId">Account ID:</label>
+        <input type="number" id="withdrawalAccountId" name="withdrawalAccountId" required>
+        <label for="withdrawalAmount">Amount:</label>
+        <input type="number" id="withdrawalAmount" name="withdrawalAmount" required>
+        <input type="submit" value="Withdraw">
+    </form>
+
+    <!-- Transfer Form -->
+    <h3>Transfer Form</h3>
+    <form id="transferForm" action="transaction_processing1.php" method="POST" enctype="application/x-www-form-urlencoded">
+        <input type="hidden" name="operation" value="transfer">
+        <label for="fromAccountId">From Account ID:</label>
+        <input type="number" id="fromAccountId" name="fromAccountId" required>
+        <label for="toAccountId">To Account ID:</label>
+        <input type="number" id="toAccountId" name="toAccountId" required>
+        <label for="transferAmount">Amount:</label>
+        <input type="number" id="transferAmount" name="transferAmount" required>
+        <input type="submit" value="Transfer">
+    </form>
+</div>
+
+
+<!-- Account Balance Inquiry Section -->
+<div id="accountBalanceInquiry" style="display:none;">
+    <h2>Account Balance Inquiry</h2>
+    <!-- Balance Inquiry Form -->
+<h3>Balance Inquiry Form</h3>
+<form id="balanceInquiryForm" action="balance_inquiry.php" method="POST" enctype="application/x-www-form-urlencoded">
+    <label for="inquiryAccountId">Account ID:</label>
+    <input type="number" id="inquiryAccountId" name="inquiryAccountId" required>
+    <input type="submit" value="Check Balance">
+</form>
+
+</div>
+
+<!-- Loan Management Section -->
+<div id="loanManagement" style="display:none;">
+    <h2>Loan Management</h2>
+    <!-- Loan Application Form -->
+    <!-- Loan Application Form -->
+<h3>Loan Application Form</h3>
+<form id="loanApplicationForm" action="loan_application.php" method="POST" enctype="application/x-www-form-urlencoded">
+    <label for="applicantName">Applicant's Name:</label>
+    <input type="text" id="applicantName" name="applicantName" required>
+    <label for="loanAmount">Loan Amount:</label>
+    <input type="number" id="loanAmount" name="loanAmount" required>
+    <input type="submit" value="Apply for Loan">
+</form>
+
+</div>
+
+<!-- Reporting Section -->
+<div id="reporting" style="display:none;">
+    <h2>Reporting</h2>
+    <a href="transaction_report.php" target="_blank"><button>Generate Transaction Report</button></a>
+    <a href="account_summary.php" target="_blank"><button>Generate Account Summary</button></a>
+</div>
+
+</body>
+</html>
